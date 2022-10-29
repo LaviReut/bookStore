@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {% if check %}
+        <div class="alert alert-warning" role="alert">
+            <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{check}}
+        </div>
+    {% endif %}
+    <form action="" method="post">
+
+        <div class="tabs effect-1">
+            <!-- tab-content -->
+        <div class="tab-content">
+            <section id="tab-item-1">
+                <ul class="bookList">   
+                    <div class="row">    
+                    <div class="col-sm-3" style="margin-top:20px;">
+                        <div  style="width: 25rem;">
+                            <img src="{{ url_for('static', filename='images/') }}{{book.imagePath}}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">{{ book.bookName }}</h5>
+                            <p class="card-text">Author:  {{ book.authorName }}</p>
+                            <p class="card-text">ReleaseDate:  {{ book.bookDate }}</p>
+                            <a href="#" class="btn btn-primary" style="padding-left:22px;">Loan Book  </a>
+                            <a href="#" class="btn btn-primary" style="margin-left:20px;">Delete Book</a>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="col-sm-3" >
+                        <div style="height:17rem;width:35rem;margin-left:130px;margin-top:20px;border: 2px solid black;border-radius:30px;background: #d8d89b;">
+                        <div style="padding-left:15px;padding-top:5px;">This Books is Fantastic!!!</div>
+                        </div>
+                    </div>
+                </div>  
+                </ul> <!--end All-Tasks-List -->
+            </section>
+        </div><!-- end tab content -->
+        </div><!-- end tab effect -->
+    </form>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="task_content categories" >    
+    <div class="">
+        <div class="content">
+            <div class="welcome">
+                <button id="openbutton" class="openbtn" >&#9776;</button>
+                <span class="welcome-text">Add Loan<br></span> 
+            </div>
+
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="inputContainer Task">
+                    {{ form.userName.label}}<br>
+                    {{ form.userName}}
+                    {% for error in form.userName.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>userName
+                <div class="inputContainer choice ">
+                    {{ form.bookName.label }}<br>
+                    {{ form.bookName }}
+                    {% for error in form.bookName.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="inputContainer  date ">
+                    {{ form.LoanType.label }}<br>
+                    {{ form.LoanType }}
+                    {% for error in form.LoanType.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="inputContainer  time">
+                    {{ form.LoanDate.label }}<br>
+                    {{ form.LoanDate }}
+                    {% for error in form.LoanDate.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="inputContainer  time">
+                    {{ form.ReturnDate.label }}<br>
+                    {{ form.ReturnDate }}
+                    {% for error in form.ReturnDate.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="btn btn-primary">   
+                    {{ form.submit(class="taskAdd btn") }}
+                </div> 
+            </form>
+        </div><!-- end content -->
+
+    </div><!-- container -->
+</div>
+{% endblock %}

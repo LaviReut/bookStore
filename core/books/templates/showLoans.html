@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {% if check %}
+        <div class="alert alert-warning" role="alert">
+            <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{check}}
+        </div>
+    {% endif %}
+    {% for message in get_flashed_messages() %}
+    <h2>{{ message }}</h2>
+    {% endfor %}
+
+    <form action="" method="post">
+
+        <div class="tabs effect-1">
+            <!-- tab-content -->
+        <div class="tab-content">
+            <section id="tab-item-1">
+                <ul class="bookList">   
+                    <div class="row"> 
+                        <div>
+                            <form class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Search Loan by user name" aria-label="Search" style="width:30rem;">
+                                <input class="form-control me-2" type="search" placeholder="Search Loan by book name" aria-label="Search" style="margin-top:10px;width:30rem;">
+                                <button class="btn btn-outline-success" type="submit" style="margin-top:10px;">Search</button>
+                              </form>
+                        </div>  
+                    {% for loan in loans %} 
+                    <div class="col-sm-3" style="margin-top:20px;">
+                        <div class="card" style="width: 18rem;border-radius:30px;">
+                            <img src="{{ url_for('static', filename='images/pexels-christina-morillo-1181244.jpg') }}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">{{ loan.book_id }}</h5>
+                            <p class="card-text">Customer Name:  {{ loan.user_id }}</p>
+                            <p class="card-text">Return By: {{ loan.returnDate }} </p>
+                            <a href="{{ url_for('books.showLoans') }}" class="btn btn-primary" style="margin-left:60px;">Return Loan</a>
+                            </div>
+                        </div>  
+                    </div>  
+                    {% endfor %}
+                </div>  
+                </ul> <!--end All-Tasks-List -->
+            </section>
+        </div><!-- end tab content -->
+        </div><!-- end tab effect -->
+    </form>
+{% endblock %}

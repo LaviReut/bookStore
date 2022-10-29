@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Display login error message-->
+{% if message %}
+<div class="alert alert-warning" role="alert">
+    <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>Invalid username or password
+</div>
+{% endif %}
+
+<div class="login">
+    <form action="" method="post" novalidate class="p-3 border border-2">
+        {{ form.hidden_tag() }}
+        <div class="Login-Header">
+            <h4 class="mb-5">Login to MyLibrary</h4>
+        </div>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <div class="loginbtn">
+            {{ form.submit(class="btn btn-primary mt-3") }}
+        </div>
+    </form>
+
+</div>
+{% endblock %}

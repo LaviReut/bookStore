@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="register" style= "margin:10px 150px 10px 150px;border: 2px solid black;border-radius:30px;">
+    <form action="" method="post" style="padding:20px;" novalidate, enctype="multipart/form-data" >
+        {{ form.hidden_tag() }}
+        <div class="Register-Header">
+            <h3 class="has-text-centered mb-5 is-size-3">New Book Details:</h3>
+        </div>
+        <div class="inputContainer Task" style="margin-top:10px;"> 
+            {{ form.bookName.label }}<br>
+            {{ form.bookName(size=20) }}
+            {% for error in form.bookName.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="inputContainer choice " style="margin-top:10px;">
+            {{ form.bookType.label}}<br>
+            {{ form.bookType}}
+            {% for error in form.bookType.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="inputContainer  date " style="margin-top:10px;">
+            {{ form.authorName.label }}<br>
+            {{ form.authorName }}
+            {% for error in form.authorName.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="inputContainer  time" style="margin-top:10px;">
+            {{ form.bookDate.label }}<br>
+            {{ form.bookDate }}
+            {% for error in form.bookDate.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="inputContainer  time" style="margin-top:10px;">
+            {{ form.amountToAdd.label }}<br>
+            {{ form.amountToAdd }}
+            {% for error in form.amountToAdd.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="inputContainer  time" style="margin-top:10px;">
+            {{ form.imagePath.label }}<br>
+            {{ form.imagePath }}
+            {% for error in form.imagePath.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="registerbtn">   
+            {{ form.submit(class="btn btn-primary mt-3")}}
+        </div> 
+    </form>
+</div>
+{% endblock %}

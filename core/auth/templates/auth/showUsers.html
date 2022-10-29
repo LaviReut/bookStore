@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if check %}
+        <div class="alert alert-warning" role="alert">
+            <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{check}}
+        </div>
+    {% endif %}
+    <form action="" method="post">
+                <div class="row">   
+                    {% for user in users %} 
+                    <div class="col-sm-4">
+                        <div class="card" style="width: 18rem;border-radius:30px;margin:20px;">
+                            <img src="{{ url_for('static', filename='images/') }}{{user.imagePath}}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">{{ user.username }}</h5>
+                            <p class="card-text">E-mail:  {{ user.email }}</p>
+                            <a href="#" class="btn btn-primary">Delete User</a>
+                            </div>
+                        </div>  
+                    </div>  
+                    {% endfor %}
+                </div>  
+    </form>
+{% endblock %}
+

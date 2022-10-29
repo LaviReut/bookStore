@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="task_content categories" >    
+    <div class="">
+        <div class="content">
+            <div class="welcome">
+                <button id="openbutton" class="openbtn" >&#9776;</button>
+                <span class="welcome-text">Manage Your book List</span> 
+            </div>
+            {% if check %}
+                <div class="alert alert-warning" role="alert">
+                    <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>
+                    {{check}}
+                </div>
+            {% endif %}
+            <form action="" method="post">
+
+              <div class="tabs effect-1">
+                 <!-- tab-content -->
+                <div class="tab-content">
+                  <section id="tab-item-1">
+                      <ul class="bookList">        
+                          {% for book in books %} 
+                          <li class="currentTaskItem">
+                              <input type="checkbox" class="taskCheckbox" name="checkedbox" id="{{ book.id }}" value="{{ book.id }}" >
+                              <label for="{{ book.bookName }}"><span class="complete-">{{ book.authorName }}</span></label>
+                              <span class="bookDetails" >Release date: {{book.bookDate}}</span>
+                              <span class="bookDetails" >Loan types: {{book.bookType}}</span>
+                              <span class="bookDetails" >Available books: {{book.availableBook}}</span>
+                              <button class="taskDelete " name="bookDelete" formnovalidate="" type="submit" ><i class="fa fa-trash-o icon">delete Book</i></button>
+                          </li>     
+                          {% endfor %}
+                      </ul> <!--end All-Tasks-List -->
+                  </section>
+                </div><!-- end tab content -->
+              </div><!-- end tab effect -->
+            </form>
+        </div><!-- end content -->
+
+    </div><!-- container -->
+</div>
+{% endblock %}
+
