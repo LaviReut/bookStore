@@ -2,20 +2,38 @@ from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required
 from core import app
 from core.auth.models import User
-from .models import Books
+from .models import Books, Category
 from ..models import Loans
 from . import books
-from .forms import BookForm, LoanForm
+from .forms import BookForm, LoanForm, CategoryForm
 from .. import db
 from datetime import datetime
 import os
 
+@books.route('/add-category', methods=['GET', 'POST'])
+@login_required
+def addCategory():
+    form= CategoryForm()
+    if form.validate_on_submit():
+        cat = Category(name=form.categoryName.data)
+        db.session.add(cat)
+        db.session.commit()
+        return redirect(url_for('books.addBook'))
+    return render_template('addCategory.html', title='add-Book', form=form)
+
+
 @books.route('/add-book', methods=['GET', 'POST'])
+@login_required
 def addBook():
     form= BookForm()
     form.bookType.choices =[1,2,3]
+    catagories= Category.query.all()
+    catList = []
+    for catagory in catagories:
+        catList.append(str(catagory.name))
+    form.bookCategory.choices = catList
     if form.validate_on_submit():
-        book = Books(bookName=form.bookName.data, authorName=form.authorName.data, bookType=form.bookType.data, bookDate= form.bookDate.data, availableBooks= form.amountToAdd.data, imagePath=request.files['imagePath'].filename)
+        book = Books(bookName=form.bookName.data, authorName=form.authorName.data, bookType=form.bookType.data, bookDate= form.bookDate.data, availableBooks= form.amountToAdd.data, imagePath=request.files['imagePath'].filename, bookCategory=form.bookCategory.data)
         fileName = request.files['imagePath'].filename
         request.files['imagePath'].save(os.path.join(app.config['UPLOAD_FOLDER'],fileName))
         db.session.add(book)
@@ -30,6 +48,10 @@ def showBooks():
     books= Books.query.all()
     date= datetime.now()
     now= date.strftime("%Y-%m-%d")
+    catagories= Category.query.all()
+    catList = []
+    for catagory in catagories:
+        catList.append(str(catagory.name))
     if request.method == "POST":
         if request.form.get('bookDelete') is not None:
             deleteLoan = request.form.get('checkedbox')
@@ -40,7 +62,7 @@ def showBooks():
                 return redirect(url_for('books.showBooks'))
             else:
                 check = 'Please check-box of book to be deleted'
-    return render_template('showBooks.html', title='add-Book', books=books, DateNow=now,check=check)
+    return render_template('showBooks.html', title='add-Book', books=books, DateNow=now, catList=catList, check=check)
 
 @books.route('/book-profile/<bookID>', methods=['GET', 'POST'])
 @login_required

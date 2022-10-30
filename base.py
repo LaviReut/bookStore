@@ -1,6 +1,6 @@
 from core import app, db
 from core.auth.models import User 
-from core.books.models import Books
+from core.books.models import Books, Category
 
 with app.app_context():
     db.create_all()
@@ -14,14 +14,21 @@ with app.app_context():
         db.session.add(adminuser)
         db.session.add(sampleUser)
         db.session.commit()
-        sampleBook = Books(bookName='WebDev', authorName='Ilya', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-christina-morillo-1181244.jpg')
-        sampleBook2 = Books(bookName='FlaskDev', authorName='Kerem', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-christina-morillo-1181288.jpg')
-        sampleBook3 = Books(bookName='DjangoDev', authorName='Noam', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-mart-production-7550312.jpg')
-        sampleBook4 = Books(bookName='StopDev', authorName='Reut', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-thisisengineering-3861972.jpg')
-        sampleBook5 = Books(bookName='WebDev2', authorName='Ilya', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-christina-morillo-1181244.jpg')
-        sampleBook6 = Books(bookName='FlaskDev2', authorName='Kerem', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-christina-morillo-1181288.jpg')
-        sampleBook7 = Books(bookName='DjangoDev2', authorName='Noam', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-mart-production-7550312.jpg')
-        sampleBook8 = Books(bookName='StopDev2', authorName='Reut', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-thisisengineering-3861972.jpg')
+        cat1 = Category(name='Programming')
+        cat2 = Category(name='Nature')
+        cat3 = Category(name='Action')
+        db.session.add(cat1)
+        db.session.add(cat2)
+        db.session.add(cat3)
+        db.session.commit()
+        sampleBook = Books(bookName='WebDev', authorName='Ilya', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-christina-morillo-1181244.jpg', bookCategory='Programming')
+        sampleBook2 = Books(bookName='FlaskDev', authorName='Kerem', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-christina-morillo-1181288.jpg', bookCategory='Programming')
+        sampleBook3 = Books(bookName='DjangoDev', authorName='Noam', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-mart-production-7550312.jpg', bookCategory='Programming')
+        sampleBook4 = Books(bookName='Mount Flask', authorName='Reut', bookType=1 , bookDate= '12/1/99', availableBooks= 1, imagePath='pexels-thisisengineering-3861972.jpg', bookCategory='Nature')
+        sampleBook5 = Books(bookName='Ocean Bugs', authorName='Ilya', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-christina-morillo-1181244.jpg', bookCategory='Nature')
+        sampleBook6 = Books(bookName='Shoot Fast Die Slow', authorName='Kerem', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-christina-morillo-1181288.jpg', bookCategory='Action')
+        sampleBook7 = Books(bookName='No Risk No Fun', authorName='Noam', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-mart-production-7550312.jpg', bookCategory='Action')
+        sampleBook8 = Books(bookName='Code Gun', authorName='Reut', bookType=1 , bookDate= '12/1/2000', availableBooks= 1, imagePath='pexels-thisisengineering-3861972.jpg', bookCategory='Action')
         db.session.add(sampleBook)
         db.session.add(sampleBook2)
         db.session.add(sampleBook3)

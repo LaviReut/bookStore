@@ -11,31 +11,28 @@
     {% for message in get_flashed_messages() %}
     <h2>{{ message }}</h2>
     {% endfor %}
-    <form action="" method="post">
-
-        <div class="tabs effect-1">
-            <!-- tab-content -->
-        <div class="tab-content">
-            <section id="tab-item-1">
-                <ul class="bookList">   
-                    <div class="row">   
-                    {% for book in books %} 
-                    <div class="col-sm-3" style="margin-top:20px;">
-                        <div class="card" style="width: 18rem;border-radius:30px;">
-                            <img src="{{ url_for('static', filename='images/') }}{{book.imagePath}}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
-                            <div class="card-body">
-                            <h5 class="card-title">{{ book.bookName }}</h5>
-                            <p class="card-text">Author:  {{ book.authorName }}</p>
-                            <p class="card-text">ReleaseDate:  {{ book.bookDate }}</p>
-                            <a href="{{ url_for('books.bookProfile', bookID='') }}/{{ book.id }}" class="btn btn-primary" style="margin-left:60px;">More Details</a>
-                            </div>
-                        </div>  
+        {% for cat in catList %}
+        <h3 style="text-align: center;">{{ cat }} Books</h3>
+        <section id="tab-item-1" >
+            <ul class="bookList">   
+                <div class="row">   
+                {% for book in books %} 
+                {% if book.bookCategory == cat %}
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <div class="card" style="width: 18rem;border-radius:30px;">
+                        <img src="{{ url_for('static', filename='images/') }}{{book.imagePath}}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title">{{ book.bookName }}</h5>
+                        <p class="card-text">Author:  {{ book.authorName }}</p>
+                        <p class="card-text">ReleaseDate:  {{ book.bookDate }}</p>
+                        <a href="{{ url_for('books.bookProfile', bookID='') }}/{{ book.id }}" class="btn btn-primary" style="margin-left:60px;">More Details</a>
+                        </div>
                     </div>  
-                    {% endfor %}
-                </div>  
-                </ul> <!--end All-Tasks-List -->
-            </section>
-        </div><!-- end tab content -->
-        </div><!-- end tab effect -->
-    </form>
+                </div> 
+                {% endif %} 
+                {% endfor %}
+            </div>  
+            </ul> <!--end All-Tasks-List -->
+        </section>
+        {% endfor %}
 {% endblock %}
