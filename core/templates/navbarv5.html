@@ -21,9 +21,10 @@
                   Books Management
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{url_for('books.showBooks')}}">All Books</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('books.showBooks', filter='all')}}">All Books</a></li>
                     <li><a class="dropdown-item" href="{{url_for('books.addBook')}}">Add Book</a></li>
                     <li><a class="dropdown-item" href="{{url_for('books.addCategory')}}">Add Category</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('books.searchBook')}}">Search Book</a></li>
                   </ul>
             </li> 
           <li class="nav-item dropdown">
@@ -31,17 +32,14 @@
               Loans Management
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{{url_for('books.showLoans')}}">Current Loans</a></li>
+              <li><a class="dropdown-item" href="{{url_for('books.showLoans', filter='all')}}">Current Loans</a></li>
               <li><a class="dropdown-item" href="{{url_for('books.addLoan')}}">Late Loans</a></li>
               <li><a class="dropdown-item" href="{{url_for('books.addLoan')}}">Create Loan</a></li>
               <li><a class="dropdown-item" href="{{url_for('books.addLoan')}}">Return Loan</a></li>
+              <li><a class="dropdown-item" href="{{url_for('books.searchLoan')}}">Search Loan</a></li>
             </ul>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search Book" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>

@@ -4,8 +4,9 @@ from flask_login import login_user, logout_user, login_required, \
 from . import auth
 from .forms import RegistrationForm, LoginForm
 from .models import User
-from .. import db
+from .. import db, app
 from werkzeug.urls import url_parse
+import os
 
 @auth.route('/show-users', methods=['GET', 'POST'])
 @login_required
@@ -31,9 +32,11 @@ def addUser():
     if form.validate_on_submit():
         user = User(username=form.username.data.lower(), email=form.email.data.lower(), imagePath=request.files['imagePath'].filename)
         user.set_password(form.password.data)
+        fileName = request.files['imagePath'].filename
+        request.files['imagePath'].save(os.path.join(app.config['UPLOAD_FOLDER'],fileName))
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('User added successfully!')
         return redirect(url_for('auth.login'))
     return render_template('auth/addUser.html', title='Register', form=form)
 

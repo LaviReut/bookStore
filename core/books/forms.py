@@ -19,6 +19,14 @@ class CategoryForm(FlaskForm):
     categoryName = StringField('Category Name', validators=[DataRequired()])
     submit = SubmitField('Add Category')
 
+class BookSearchForm(FlaskForm):
+    search = StringField('Book Name', validators=[DataRequired()])
+    submit = SubmitField('Search')
+
+class LoanSearchForm(FlaskForm):
+    search = StringField('Loan Name', validators=[DataRequired()])
+    submit = SubmitField('Search')
+
 class LoanForm(FlaskForm):
     bookName = SelectField('Book Name', coerce=str , validators=[DataRequired()]) 
     userName = SelectField('User Name', coerce=str , validators=[DataRequired()]) 

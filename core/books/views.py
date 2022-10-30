@@ -5,7 +5,7 @@ from core.auth.models import User
 from .models import Books, Category
 from ..models import Loans
 from . import books
-from .forms import BookForm, LoanForm, CategoryForm
+from .forms import BookForm, LoanForm, CategoryForm, BookSearchForm, LoanSearchForm
 from .. import db
 from datetime import datetime
 import os
@@ -38,31 +38,64 @@ def addBook():
         request.files['imagePath'].save(os.path.join(app.config['UPLOAD_FOLDER'],fileName))
         db.session.add(book)
         db.session.commit()
-        return redirect(url_for('books.showBooks'))
+        return redirect(url_for('books.showBooks', filter='all'))
     return render_template('addBook.html', title='add-Book', form=form)
 
-@books.route('/show-books', methods=['GET', 'POST'])
+@books.route('/show-books/<filter>', methods=['GET', 'POST'])
 @login_required
-def showBooks():
+def showBooks(filter):
+    search = BookSearchForm()
     check= None
-    books= Books.query.all()
-    date= datetime.now()
-    now= date.strftime("%Y-%m-%d")
+    if (filter == 'all') or filter is None:
+        books= Books.query.all()
+    else:
+        books = Books.query.filter_by(bookName=filter)
     catagories= Category.query.all()
     catList = []
     for catagory in catagories:
         catList.append(str(catagory.name))
     if request.method == "POST":
-        if request.form.get('bookDelete') is not None:
-            deleteLoan = request.form.get('checkedbox')
-            if deleteLoan is not None:
-                book = Books.query.filter_by(id=int(deleteLoan)).one()
-                db.session.delete(book)
-                db.session.commit()
-                return redirect(url_for('books.showBooks'))
-            else:
-                check = 'Please check-box of book to be deleted'
-    return render_template('showBooks.html', title='add-Book', books=books, DateNow=now, catList=catList, check=check)
+        if search.validate_on_submit():
+            filter = search.search.data
+            return redirect(url_for('books.showBooks', filter=filter))
+    return render_template('showBooks.html', title='add-Book', books=books, catList=catList, check=check, search=search)
+
+@books.route('/search-book', methods=['GET', 'POST'])
+@login_required
+def searchBook():
+    search = BookSearchForm()
+    if request.method == "POST":
+        if search.validate_on_submit():
+            filter = search.search.data
+            return redirect(url_for('books.showBooks', filter=filter))
+    return render_template('searchBook.html', title='add-Book', search=search)
+
+
+@books.route('/search-loan', methods=['GET', 'POST'])
+@login_required
+def searchLoan():
+    search = LoanSearchForm()
+    if request.method == "POST":
+        if search.validate_on_submit():
+            filter = search.search.data
+            return redirect(url_for('books.showLoans', filter=filter))
+    return render_template('searchLoan.html', search=search)
+
+
+@books.route('/loan-profile/<loanID>', methods=['GET', 'POST'])
+@login_required
+def loanProfile(loanID):
+    check= None
+    print(loanID)
+    loan= Loans.query.filter_by(id=int(loanID)).one()
+    if request.method == "POST":
+        if request.form.get('deleteLoan') is not None:
+            db.session.delete(loan)
+            db.session.commit()
+            flash('Loan deleted succesfully!')
+            return redirect(url_for('books.showLoans', filter='all'))
+    return render_template('loanProfile.html', loan=loan)
+
 
 @books.route('/book-profile/<bookID>', methods=['GET', 'POST'])
 @login_required
@@ -71,11 +104,13 @@ def bookProfile(bookID):
     print(bookID)
     book= Books.query.filter_by(id=int(bookID)).one()
     if request.method == "POST":
-        if request.form.get('bookDelete') is not None:
+        if request.form.get('deleteBook') is not None:
             db.session.delete(book)
             db.session.commit()
             flash('Book deleted succesfully!')
-            return redirect(url_for('books.showBooks'))
+            return redirect(url_for('books.showBooks', filter='all'))
+        if request.form.get('loanBook') is not None:
+            return redirect(url_for('books.addLoan')) 
         else:
              check = 'Please check-box of book to be deleted'
     return render_template('bookProfile.html', book=book, check=check)
@@ -99,23 +134,15 @@ def addLoan():
         loan = Loans(bookName=form.bookName.data, returnDate=form.ReturnDate.data, loanDate=form.LoanDate.data, book_id= form.bookName.data, user_id= form.userName.data)
         db.session.add(loan)
         db.session.commit()
-        return redirect(url_for('books.showLoans'))
+        return redirect(url_for('books.showLoans', filter='all'))
     return render_template('addLoan.html', title='add-Loan', form=form)
 
-@books.route('/show-loans', methods=['GET', 'POST'])
+@books.route('/show-loans/<filter>', methods=['GET', 'POST'])
 @login_required
-def showLoans():
+def showLoans(filter):
     check= None
-    loans= Loans.query.all()
-    if request.method == "POST":
-        if request.form.get('loanDelete') is not None:
-            deleteLoan = request.form.get('checkedbox')
-            if deleteLoan is not None:
-                loan = Loans.query.filter_by(id=int(deleteLoan)).one()
-                db.session.delete(loan)
-                db.session.commit()
-                return redirect(url_for('books.showLoans'))
-            else:
-                check = 'Please check-box of loan to be deleted'
-
-    return render_template('showLoans.html', title='add-Loan', loans=loans, check=check)
+    if (filter == 'all') or filter is None:
+        loans= Loans.query.all()
+    else:
+        loans = Loans.query.filter_by(bookName=filter)
+    return render_template('showLoans.html', loans=loans, check=check)

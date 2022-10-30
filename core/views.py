@@ -4,5 +4,5 @@ from flask import render_template, flash, redirect, url_for, request
 
 @app.route('/')
 def index():
-    return redirect(url_for('books.showBooks'))
+    return redirect(url_for('books.showBooks', filter='all'))
 
