@@ -9,7 +9,7 @@
         </div>
     {% endif %}
     {% for message in get_flashed_messages() %}
-    <h2>{{ message }}</h2>
+    <p> * {{ message }}</p>
     {% endfor %}
         {% for cat in catList %}
         <h3 style="text-align: center;">{{ cat }} Books</h3>

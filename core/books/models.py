@@ -9,7 +9,7 @@ class Books(db.Model):
     availableBooks = db.Column(db.Integer)
     imagePath = db.Column(db.String)
     bookCategory = db.Column(db.String(20))
-    loan = db.relationship('Loans', backref='books', lazy="dynamic")
+    loans = db.relationship('Loans', backref='book')
     
     def __repr__(self):
         return '<BookName {}>'.format(self.bookName)

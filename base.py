@@ -1,4 +1,5 @@
 from core import app, db
+from core.models import Loans
 from core.auth.models import User 
 from core.books.models import Books, Category
 
@@ -38,3 +39,7 @@ with app.app_context():
         db.session.add(sampleBook7)
         db.session.add(sampleBook8)
         db.session.commit()
+    loans = Loans.query.all()
+    print('testPrint')
+    for loan in loans:
+        print(loan.book.bookName)

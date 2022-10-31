@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    loan = db.relationship('Loans', backref='users', lazy="dynamic")
+    loans = db.relationship('Loans', backref='user')
     imagePath = db.Column(db.String)
 
     def __repr__(self):

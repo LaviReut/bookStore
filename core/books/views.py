@@ -90,9 +90,9 @@ def loanProfile(loanID):
     loan= Loans.query.filter_by(id=int(loanID)).one()
     if request.method == "POST":
         if request.form.get('deleteLoan') is not None:
+            flash('User: ' + loan.user_id + ' returened the book: ' + loan.book_id + '. Loan ID:' +  str(loan.id) + ' deleted succesfully!')
             db.session.delete(loan)
             db.session.commit()
-            flash('Loan deleted succesfully!')
             return redirect(url_for('books.showLoans', filter='all'))
     return render_template('loanProfile.html', loan=loan)
 
@@ -107,7 +107,7 @@ def bookProfile(bookID):
         if request.form.get('deleteBook') is not None:
             db.session.delete(book)
             db.session.commit()
-            flash('Book deleted succesfully!')
+            flash(book.bookName + ' book deleted succesfully!')
             return redirect(url_for('books.showBooks', filter='all'))
         if request.form.get('loanBook') is not None:
             return redirect(url_for('books.addLoan')) 
@@ -123,7 +123,13 @@ def addLoan():
     form= LoanForm()
     books= Books.query.all()
     for book in books:
-        bookList.append(book.bookName)
+        if book.bookType == 1:
+            loanLenght = '10 days'
+        elif book.bookType == 2:    
+            loanLenght = '20 days'
+        elif book.bookType == 3:
+            loanLenght = '30 days'
+        bookList.append(book.bookName + '(' + loanLenght + ')')
     users= User.query.all()
     for user in users:
         userList.append(user.username)
@@ -131,7 +137,10 @@ def addLoan():
     form.userName.choices = userList
     form.LoanType.choices = [1,2,3]
     if form.validate_on_submit():
-        loan = Loans(bookName=form.bookName.data, returnDate=form.ReturnDate.data, loanDate=form.LoanDate.data, book_id= form.bookName.data, user_id= form.userName.data)
+        book = Books.query.filter_by(bookName=form.bookName.data).first()
+        user = User.query.filter_by(username=form.userName.data).first()
+        ############## add login to loan return date and pass to new loan
+        # loan = Loans(bookName=form.bookName.data, returnDate=form.ReturnDate.data, loanDate=form.LoanDate.data, book_id= book.id, user_id= user.id)
         db.session.add(loan)
         db.session.commit()
         return redirect(url_for('books.showLoans', filter='all'))
