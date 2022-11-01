@@ -10,6 +10,8 @@ from .. import db
 from datetime import datetime
 import os
 
+############################### Add-Category ###############################
+
 @books.route('/add-category', methods=['GET', 'POST'])
 @login_required
 def addCategory():
@@ -21,6 +23,7 @@ def addCategory():
         return redirect(url_for('books.addBook'))
     return render_template('addCategory.html', title='add-Book', form=form)
 
+############################### Add-Book ###############################
 
 @books.route('/add-book', methods=['GET', 'POST'])
 @login_required
@@ -41,6 +44,8 @@ def addBook():
         return redirect(url_for('books.showBooks', filter='all'))
     return render_template('addBook.html', title='add-Book', form=form)
 
+############################### Show-Books ###############################
+
 @books.route('/show-books/<filter>', methods=['GET', 'POST'])
 @login_required
 def showBooks(filter):
@@ -60,6 +65,8 @@ def showBooks(filter):
             return redirect(url_for('books.showBooks', filter=filter))
     return render_template('showBooks.html', title='add-Book', books=books, catList=catList, check=check, search=search)
 
+############################### Search-Book ###############################
+
 @books.route('/search-book', methods=['GET', 'POST'])
 @login_required
 def searchBook():
@@ -70,32 +77,7 @@ def searchBook():
             return redirect(url_for('books.showBooks', filter=filter))
     return render_template('searchBook.html', title='add-Book', search=search)
 
-
-@books.route('/search-loan', methods=['GET', 'POST'])
-@login_required
-def searchLoan():
-    search = LoanSearchForm()
-    if request.method == "POST":
-        if search.validate_on_submit():
-            filter = search.search.data
-            return redirect(url_for('books.showLoans', filter=filter))
-    return render_template('searchLoan.html', search=search)
-
-
-@books.route('/loan-profile/<loanID>', methods=['GET', 'POST'])
-@login_required
-def loanProfile(loanID):
-    check= None
-    print(loanID)
-    loan= Loans.query.filter_by(id=int(loanID)).one()
-    if request.method == "POST":
-        if request.form.get('deleteLoan') is not None:
-            flash('User: ' + loan.user_id + ' returened the book: ' + loan.book_id + '. Loan ID:' +  str(loan.id) + ' deleted succesfully!')
-            db.session.delete(loan)
-            db.session.commit()
-            return redirect(url_for('books.showLoans', filter='all'))
-    return render_template('loanProfile.html', loan=loan)
-
+############################### Book-Profile ###############################
 
 @books.route('/book-profile/<bookID>', methods=['GET', 'POST'])
 @login_required
@@ -114,6 +96,36 @@ def bookProfile(bookID):
         else:
              check = 'Please check-box of book to be deleted'
     return render_template('bookProfile.html', book=book, check=check)
+
+############################### Search-Loan ###############################
+
+@books.route('/search-loan', methods=['GET', 'POST'])
+@login_required
+def searchLoan():
+    search = LoanSearchForm()
+    if request.method == "POST":
+        if search.validate_on_submit():
+            filter = search.search.data
+            return redirect(url_for('books.showLoans', filter=filter))
+    return render_template('searchLoan.html', search=search)
+
+############################### Loan-Profile ###############################
+
+@books.route('/loan-profile/<loanID>', methods=['GET', 'POST'])
+@login_required
+def loanProfile(loanID):
+    check= None
+    print(loanID)
+    loan= Loans.query.filter_by(id=int(loanID)).one()
+    if request.method == "POST":
+        if request.form.get('deleteLoan') is not None:
+            flash('User: ' + loan.user_id + ' returened the book: ' + loan.book_id + '. Loan ID:' +  str(loan.id) + ' deleted succesfully!')
+            db.session.delete(loan)
+            db.session.commit()
+            return redirect(url_for('books.showLoans', filter='all'))
+    return render_template('loanProfile.html', loan=loan)
+
+############################### Add-Loan ###############################
 
 @books.route('/add-loan', methods=['GET', 'POST'])
 @login_required
@@ -145,6 +157,8 @@ def addLoan():
         db.session.commit()
         return redirect(url_for('books.showLoans', filter='all'))
     return render_template('addLoan.html', title='add-Loan', form=form)
+
+############################### Show-Loans ###############################
 
 @books.route('/show-loans/<filter>', methods=['GET', 'POST'])
 @login_required
