@@ -153,7 +153,6 @@ def addLoan():
         user = User.query.filter_by(username=form.userName.data).first()
         loandate = date.today()
         returnDate = loandate + timedelta(days=10)
-        ############## add login to loan return date and pass to new loan
         loan = Loans(bookName=form.bookName.data.split("(")[0], returnDate=str(returnDate.strftime("%d/%m/%y")), loanDate=str(loandate.strftime("%m/%d/%y")), book_id= book.id, user_id= user.id)
         db.session.add(loan)
         db.session.commit()
