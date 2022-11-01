@@ -25,8 +25,8 @@
                         <div class="card" style="width: 18rem;border-radius:30px;">
                             <img src="{{ url_for('static', filename='images/pexels-christina-morillo-1181244.jpg') }}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
                             <div class="card-body">
-                            <h5 class="card-title">{{ loan.book_id }}</h5>
-                            <p class="card-text">Customer Name:  {{ loan.user_id }}</p>
+                            <h5 class="card-title">{{ loan.book.bookName }}</h5>
+                            <p class="card-text">Customer Name:  {{ loan.user.username }}</p>
                             <p class="card-text">Return By: {{ loan.returnDate }} </p>
                             <a href="{{ url_for('books.loanProfile', loanID='') }}/{{ loan.id }}" class="btn btn-primary" style="margin-left:60px;">More Details</a>
                             </div>

@@ -30,8 +30,4 @@ class LoanSearchForm(FlaskForm):
 class LoanForm(FlaskForm):
     bookName = SelectField('Book Name', coerce=str , validators=[DataRequired()]) 
     userName = SelectField('User Name', coerce=str , validators=[DataRequired()]) 
-    LoanType = SelectField('Loan Type', coerce=int , validators=[DataRequired()]) 
-    LoanDate = DateField('Loan Date', format='%Y-%m-%d' , validators=[DataRequired()])
-    ReturnDate = DateField('Return Date', format='%Y-%m-%d' , validators=[DataRequired()])
-    # time = TimeField('Time', format='%H:%M' , validators=[DataRequired()])
     submit = SubmitField('Add Loan')

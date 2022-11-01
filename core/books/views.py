@@ -7,7 +7,7 @@ from ..models import Loans
 from . import books
 from .forms import BookForm, LoanForm, CategoryForm, BookSearchForm, LoanSearchForm
 from .. import db
-from datetime import datetime
+from datetime import date, timedelta
 import os
 
 ############################### Add-Category ###############################
@@ -119,7 +119,7 @@ def loanProfile(loanID):
     loan= Loans.query.filter_by(id=int(loanID)).one()
     if request.method == "POST":
         if request.form.get('deleteLoan') is not None:
-            flash('User: ' + loan.user_id + ' returened the book: ' + loan.book_id + '. Loan ID:' +  str(loan.id) + ' deleted succesfully!')
+            flash('User: ' + loan.user.username + ' returened the book: ' + loan.book.bookName + '. Loan ID:' +  str(loan.id) + ' deleted succesfully!')
             db.session.delete(loan)
             db.session.commit()
             return redirect(url_for('books.showLoans', filter='all'))
@@ -147,12 +147,14 @@ def addLoan():
         userList.append(user.username)
     form.bookName.choices = bookList
     form.userName.choices = userList
-    form.LoanType.choices = [1,2,3]
     if form.validate_on_submit():
-        book = Books.query.filter_by(bookName=form.bookName.data).first()
+        print('book NAME:' + form.bookName.data.split("(")[0])
+        book = Books.query.filter_by(bookName=form.bookName.data.split("(")[0]).first()
         user = User.query.filter_by(username=form.userName.data).first()
+        loandate = date.today()
+        returnDate = loandate + timedelta(days=10)
         ############## add login to loan return date and pass to new loan
-        # loan = Loans(bookName=form.bookName.data, returnDate=form.ReturnDate.data, loanDate=form.LoanDate.data, book_id= book.id, user_id= user.id)
+        loan = Loans(bookName=form.bookName.data.split("(")[0], returnDate=str(returnDate.strftime("%d/%m/%y")), loanDate=str(loandate.strftime("%m/%d/%y")), book_id= book.id, user_id= user.id)
         db.session.add(loan)
         db.session.commit()
         return redirect(url_for('books.showLoans', filter='all'))

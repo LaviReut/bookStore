@@ -20,8 +20,9 @@
                         <div  style="width: 25rem;">
                             <img src="{{ url_for('static', filename='images/pexels-christina-morillo-1181288.jpg') }}" class="card-img-top" style="border-radius:30px;background: #0d0d0c;padding: 3px;" alt="...">
                             <div class="card-body">
-                            <h5 class="card-title">{{ loan.book_id }}</h5>
-                            <p class="card-text">Customer:  {{ loan.user_id }}</p>
+                            <h5 class="card-title">{{ loan.book.bookName }}</h5>
+                            <p class="card-text">Customer:  {{ loan.user.username }}</p>
+                            <p class="card-text">Loan Date:  {{ loan.loanDate }}</p>
                             <input type="submit" name='deleteLoan' value="Return Loan" class="btn btn-primary" >
                             </div>
                         </div>  
