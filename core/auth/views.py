@@ -2,17 +2,34 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, login_required, \
     current_user
 from . import auth
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, UserSearchForm
 from .models import User
 from .. import db, app
 from werkzeug.urls import url_parse
 import os
 
 
+@auth.route('/user-profile/username/<userName>', methods=['GET', 'POST'])
+@login_required
+def userProfileByName(userName):
+    try:
+        user = User.query.filter_by(username=userName).one()
+    except:
+        flash('The user: ' + userName + 'Not Found!')
+        return redirect(url_for('auth.showUsers', filter='all'))
+    if request.method == "POST":
+        if request.form.get('deleteUser') is not None:
+            db.session.delete(user)
+            db.session.commit()
+            flash('The User: ' + user.username + ' Deleted Succesfully!')
+            return redirect(url_for('auth.showUsers', filter='all'))
+    return render_template('auth/userProfile.html', user=user)
+
+
 @auth.route('/user-profile/<userID>', methods=['GET', 'POST'])
 @login_required
 def userProfile(userID):
-    user= User.query.filter_by(id=int(userID)).one()
+    user = User.query.filter_by(id=int(userID)).one()
     if request.method == "POST":
         if request.form.get('deleteUser') is not None:
             db.session.delete(user)
@@ -27,6 +44,16 @@ def userProfile(userID):
 def showUsers():
     users= User.query.all()
     return render_template('auth/showUsers.html', users=users)
+
+@auth.route('/search-user', methods=['GET', 'POST'])
+@login_required
+def searchUser():
+    form = UserSearchForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            filter = form.search.data
+            return redirect(url_for('auth.userProfileByName', userName=filter))
+    return render_template('auth/searchUser.html', search=form)
 
 @auth.route('/add-user', methods=['GET', 'POST'])
 @login_required

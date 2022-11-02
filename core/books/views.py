@@ -153,7 +153,7 @@ def addLoan():
             returnDate = loandate + timedelta(days=10)
         elif book.bookType==2:
             returnDate = loandate + timedelta(days=5) 
-        elif book.bookType==2:
+        elif book.bookType==3:
             returnDate = loandate + timedelta(days=2)     
         loan = Loans(bookName=form.bookName.data.split("(")[0], returnDate=str(returnDate.strftime("%d/%m/%y")), loanDate=str(loandate.strftime("%d/%m/%y")), book_id= book.id, user_id= user.id)
         db.session.add(loan)
