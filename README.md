@@ -1,19 +1,29 @@
-Reut's Library
-This is a Library management project. To practice Flask/SQLAlchemy usage.
+# Reut's Library
 
-Env Setup
+This is a Library management project.
+To practice Flask/SQLAlchemy usage.
+
+## Env Setup
+
 Clone the repo + Install Dependencies + set ENV vars.
 
+```bash
 git clone https://github.com/LaviReut/bookStore.git
 cd bookStroe
 pip install -r requirements.txt
 $env:FLASK_APP='base.py'
-Usage
+```
+
+## Usage
+
 Run the app in localhost
 
+```bash
 python -m flask run --debugger
-Contributing
+```
+
+## Contributing
 If you wish to explore Flask and SQLAlchmey with me, feel free to open Issue and Pull Request to this Repo.
 
-License
+## License
 Free To The World!
