@@ -2,20 +2,18 @@
 
 
 {% block content %}
-    {% if check %}
-        <div class="alert alert-warning" role="alert">
-            <span class="closebtns" onclick="this.parentElement.style.display='none';">&times;</span>
-            {{check}}
-        </div>
-    {% endif %}
     {% for message in get_flashed_messages() %}
     <p> * {{ message }}</p>
     {% endfor %}
-
     <form action="" method="post">
-
-        <div class="tabs effect-1">
+        <div class="tabs effect-1" > 
             <!-- tab-content -->
+        {% if late %}
+            <h3 style="text-align: center;">Late Loans</h3>
+        {% else %}
+            <h3 style="text-align: center;">All Loans</h3>
+        {% endif %}
+
         <div class="tab-content">
             <section id="tab-item-1">
                 <ul class="bookList">   

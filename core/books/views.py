@@ -7,7 +7,7 @@ from ..models import Loans
 from . import books
 from .forms import BookForm, LoanForm, CategoryForm, BookSearchForm, LoanSearchForm
 from .. import db
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import os
 
 ############################### Add-Category ###############################
@@ -82,8 +82,6 @@ def searchBook():
 @books.route('/book-profile/<bookID>', methods=['GET', 'POST'])
 @login_required
 def bookProfile(bookID):
-    check= None
-    print(bookID)
     book= Books.query.filter_by(id=int(bookID)).one()
     if request.method == "POST":
         if request.form.get('deleteBook') is not None:
@@ -95,7 +93,7 @@ def bookProfile(bookID):
             return redirect(url_for('books.addLoan')) 
         else:
              check = 'Please check-box of book to be deleted'
-    return render_template('bookProfile.html', book=book, check=check)
+    return render_template('bookProfile.html', book=book)
 
 ############################### Search-Loan ###############################
 
@@ -138,9 +136,9 @@ def addLoan():
         if book.bookType == 1:
             loanLenght = '10 days'
         elif book.bookType == 2:    
-            loanLenght = '20 days'
+            loanLenght = '5 days'
         elif book.bookType == 3:
-            loanLenght = '30 days'
+            loanLenght = '2 days'
         bookList.append(book.bookName + '(' + loanLenght + ')')
     users= User.query.all()
     for user in users:
@@ -148,12 +146,16 @@ def addLoan():
     form.bookName.choices = bookList
     form.userName.choices = userList
     if form.validate_on_submit():
-        print('book NAME:' + form.bookName.data.split("(")[0])
         book = Books.query.filter_by(bookName=form.bookName.data.split("(")[0]).first()
         user = User.query.filter_by(username=form.userName.data).first()
         loandate = date.today()
-        returnDate = loandate + timedelta(days=10)
-        loan = Loans(bookName=form.bookName.data.split("(")[0], returnDate=str(returnDate.strftime("%d/%m/%y")), loanDate=str(loandate.strftime("%m/%d/%y")), book_id= book.id, user_id= user.id)
+        if book.bookType==1:
+            returnDate = loandate + timedelta(days=10)
+        elif book.bookType==2:
+            returnDate = loandate + timedelta(days=5) 
+        elif book.bookType==2:
+            returnDate = loandate + timedelta(days=2)     
+        loan = Loans(bookName=form.bookName.data.split("(")[0], returnDate=str(returnDate.strftime("%d/%m/%y")), loanDate=str(loandate.strftime("%d/%m/%y")), book_id= book.id, user_id= user.id)
         db.session.add(loan)
         db.session.commit()
         return redirect(url_for('books.showLoans', filter='all'))
@@ -164,9 +166,18 @@ def addLoan():
 @books.route('/show-loans/<filter>', methods=['GET', 'POST'])
 @login_required
 def showLoans(filter):
-    check= None
+    late = False
     if (filter == 'all') or filter is None:
         loans= Loans.query.all()
+    elif filter == 'late':
+        late = True
+        allLoans= Loans.query.all() 
+        today = datetime.now().date()
+        lateIDs =[]
+        for loan in allLoans:
+            if datetime.strptime(loan.returnDate, '%d/%m/%y').date() < today:
+                lateIDs.append(str(loan.id))
+        loans= Loans.query.filter(Loans.id.in_(lateIDs)).all()
     else:
         loans = Loans.query.filter_by(bookName=filter)
-    return render_template('showLoans.html', loans=loans, check=check)
+    return render_template('showLoans.html', loans=loans, late=late)

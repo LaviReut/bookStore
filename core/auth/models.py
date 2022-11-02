@@ -7,9 +7,11 @@ from ..models import Loans
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    username = db.Column(db.String(), index=True, unique=True)
+    email = db.Column(db.String(), index=True, unique=True)
+    age = db.Column(db.String())
+    city = db.Column(db.String())
+    password_hash = db.Column(db.String())
     loans = db.relationship('Loans', backref='user')
     imagePath = db.Column(db.String)
 

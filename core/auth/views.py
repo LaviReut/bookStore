@@ -8,36 +8,39 @@ from .. import db, app
 from werkzeug.urls import url_parse
 import os
 
+
+@auth.route('/user-profile/<userID>', methods=['GET', 'POST'])
+@login_required
+def userProfile(userID):
+    user= User.query.filter_by(id=int(userID)).one()
+    if request.method == "POST":
+        if request.form.get('deleteUser') is not None:
+            db.session.delete(user)
+            db.session.commit()
+            flash('The User: ' + user.username + ' Deleted Succesfully!')
+            return redirect(url_for('auth.showUsers', filter='all'))
+    return render_template('auth/userProfile.html', user=user)
+
+
 @auth.route('/show-users', methods=['GET', 'POST'])
 @login_required
 def showUsers():
-    check= None
     users= User.query.all()
-    if request.method == "POST":
-        if request.form.get('userDelete') is not None:
-            deleteLoan = request.form.get('checkedbox')
-            if deleteLoan is not None:
-                user = User.query.filter_by(id=int(deleteLoan)).one()
-                db.session.delete(user)
-                db.session.commit()
-                return redirect(url_for('auth.showUsers'))
-            else:
-                check = 'Please check-box of user to be deleted'
-    return render_template('auth/showUsers.html', users=users,check=check)
+    return render_template('auth/showUsers.html', users=users)
 
 @auth.route('/add-user', methods=['GET', 'POST'])
 @login_required
 def addUser():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data.lower(), email=form.email.data.lower(), imagePath=request.files['imagePath'].filename)
+        user = User(username=form.username.data.lower(), email=form.email.data.lower(), age=form.age.data.lower(), city=form.city.data.lower(), imagePath=request.files['imagePath'].filename)
         user.set_password(form.password.data)
         fileName = request.files['imagePath'].filename
         request.files['imagePath'].save(os.path.join(app.config['UPLOAD_FOLDER'],fileName))
         db.session.add(user)
         db.session.commit()
         flash('User added successfully!')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.showUsers'))
     return render_template('auth/addUser.html', title='Register', form=form)
 
 

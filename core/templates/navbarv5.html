@@ -13,7 +13,6 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="{{url_for('auth.showUsers')}}">Users</a></li>
                   <li><a class="dropdown-item" href="{{url_for('auth.addUser')}}">Add User</a></li>
-                  <li><a class="dropdown-item" href="{{url_for('auth.showUsers')}}">Remove User</a></li>
                 </ul>
             </li> 
             <li class="nav-item dropdown">
@@ -33,9 +32,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{{url_for('books.showLoans', filter='all')}}">Current Loans</a></li>
-              <li><a class="dropdown-item" href="{{url_for('books.addLoan')}}">Late Loans</a></li>
+              <li><a class="dropdown-item" href="{{url_for('books.showLoans', filter='late')}}">Late Loans</a></li>
               <li><a class="dropdown-item" href="{{url_for('books.addLoan')}}">Create Loan</a></li>
-              <li><a class="dropdown-item" href="{{url_for('books.searchLoan')}}">Search Loan</a></li>
             </ul>
           </li>
         </ul>

@@ -7,6 +7,9 @@
             {{check}}
         </div>
     {% endif %}
+    {% for message in get_flashed_messages() %}
+    <p> * {{ message }}</p>
+    {% endfor %}
     <form action="" method="post">
                 <div class="row">   
                     {% for user in users %} 
@@ -16,7 +19,7 @@
                             <div class="card-body">
                             <h5 class="card-title">{{ user.username }}</h5>
                             <p class="card-text">E-mail:  {{ user.email }}</p>
-                            <a href="#" class="btn btn-primary">Delete User</a>
+                            <a href="{{ url_for('auth.userProfile', userID='') }}/{{ user.id }}" class="btn btn-primary" style="margin-left:60px;">More Details</a>
                             </div>
                         </div>  
                     </div>  
