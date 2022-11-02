@@ -5,8 +5,10 @@ To practice Flask/SQLAlchemy usage.
 
 
 ![alt text](https://github.com/LaviReut/bookStore/blob/main/library.png?raw=true)
-https://github.com/LaviReut/bookStore/blob/main/README.md
-
+<p align="center">
+  <img src="library.png" width="350" title="hover text">
+  <img src="library.png" width="350" alt="accessibility text">
+</p>
 ## Env Setup
 
 Clone the repo + Install Dependencies + set ENV vars.
