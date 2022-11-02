@@ -6,6 +6,7 @@ To practice Flask/SQLAlchemy usage.
 <p align="center">
   <img src="library.png" width="350" title="hover text">
 </p>
+
 ## Env Setup
 
 Clone the repo + Install Dependencies + set ENV vars.
